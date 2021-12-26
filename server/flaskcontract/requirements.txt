@@ -1,0 +1,13 @@
+flask
+flask-sqlalchemy
+flask-bcrypt
+python-dotenv
+flask-session
+redis
+flask-cors
+flask-apispec==0.11.0
+marshmallow==3.12.1
+flask_swagger_ui
+flask_migrate
+flask-socketio
+eventlet
