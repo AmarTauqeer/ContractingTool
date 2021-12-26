@@ -16,25 +16,81 @@
     }
   ],
   "servers": [
-        {
-        "url": "/"
-        }
-    ],
+    {
+      "url": "/"
+    }
+  ],
   "components": {
-        "schemas": {
-            "Authentication": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                    "type": "string"
-                    },
-                    "password": {
-                    "type": "string"
-                    }
-                }
-            }
+    "schemas": {
+      "Authentication": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
         }
-    },
+      },
+      "Id": {
+        "type": "string",
+        "properties": {
+          "Id": {
+            "type": "string"
+          }
+        }
+      },
+      "Room": {
+        "type": "object",
+        "properties": {
+          "room_name": {
+            "type": "string"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "RoomMember": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          },
+          "room_id": {
+            "type": "string"
+          },
+          "added_by": {
+            "type": "string"
+          },
+          "added_at": {
+            "type": "string"
+          }
+        }
+      },
+      "ChatMessage": {
+        "type": "object",
+        "properties": {
+          "room_member_id": {
+            "type": "string"
+          },
+          "room_id": {
+            "type": "string"
+          },
+          "added_at": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
   "paths": {
     "/contract/api/login": {
       "post": {
@@ -102,6 +158,105 @@
         }
       }
     },
+    "/contract/api/addroom": {
+      "post": {
+        "tags": [
+          "Add Room"
+        ],
+        "summary": "Adding room information",
+        "requestBody": {
+          "description": "Room information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Room"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Room"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/components/schemas/Room"
+            }
+          }
+        }
+      }
+    },
+    "/contract/api/addmessage": {
+      "post": {
+        "tags": [
+          "Add Message"
+        ],
+        "summary": "Adding messages",
+        "requestBody": {
+          "description": "Message information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/ChatMessage"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/components/schemas/ChatMessage"
+            }
+          }
+        }
+      }
+    },
+    "/contract/api/addmembers": {
+      "post": {
+        "tags": [
+          "Add Room Members"
+        ],
+        "summary": "Adding room members",
+        "requestBody": {
+          "description": "Room members information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomMember"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/RoomMember"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/components/schemas/RoomMember"
+            }
+          }
+        }
+      }
+    },
     "/contract/api/get_user": {
       "get": {
         "tags": [
@@ -117,6 +272,250 @@
           }
         }
       }
+    },
+    "/contract/api/chat/{roomid}": {
+      "get": {
+        "tags": [
+          "Get Message By Id"
+        ],
+        "summary": "Get message based on a room",
+        "parameters": [
+          {
+            "name": "roomid",
+            "in": "path",
+            "description": "room id to obtain message",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_user_by_id/{id}": {
+      "get": {
+        "tags": [
+          "Get User By Id"
+        ],
+        "summary": "Get User by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "user id to obtain user",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/delete_room/{id}": {
+      "delete": {
+        "tags": [
+          "Delete room"
+        ],
+        "summary": "Delete room by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "room id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_all_users": {
+      "get": {
+        "tags": [
+          "Get all users"
+        ],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/logout": {
+      "get": {
+        "tags": [
+          "Logout"
+        ],
+        "summary": "Logout",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_rooms": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "Get all rooms",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_room_by_id/{id}": {
+      "get": {
+        "tags": [
+          "Get room By Id"
+        ],
+        "summary": "Get room by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "room id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_room_members/{roomid}": {
+      "get": {
+        "tags": [
+          "Get room members"
+        ],
+        "summary": "Get room members by room id",
+        "parameters": [
+          {
+            "name": "roomid",
+            "in": "path",
+            "description": "room id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_room_member_byid/{id}": {
+      "get": {
+        "tags": [
+          "Get room member by id"
+        ],
+        "summary": "Get room member by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "room member id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/delete_room_member/{id}": {
+      "delete": {
+        "tags": [
+          "Delete room member"
+        ],
+        "summary": "Delete room member by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "room member id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
     }
   }
-  }
+}

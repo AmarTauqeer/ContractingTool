@@ -40,7 +40,7 @@ class RoomMemberSchema(Schema):
 
 
 @app.route("/contract/api/addmessage", methods=["POST"])
-@marshal_with(RoomSchema)
+# @marshal_with(RoomSchema)
 def add_chat_message():
     room_member_id = request.json["room_member_id"]
     room_id = request.json["room_id"]
@@ -57,7 +57,7 @@ def add_chat_message():
     ), 200
 
 
-@app.route("/contract/api/chat/<string:roomid>")
+@app.route("/contract/api/chat/<string:roomid>", methods=["GET"])
 def get_chat_data(roomid):
     resulted_arry = []
     chat_messages = Chat.query.filter_by(room_id=roomid).all()
@@ -82,7 +82,7 @@ def get_chat_data(roomid):
         return jsonify({"Error": "No record is found or there are some issues"}), 202
 
 
-@app.route("/contract/api/get_user")
+@app.route("/contract/api/get_user", methods=["GET"])
 def get_current_user():
     user_id = session.get("user_id")
 
@@ -98,7 +98,7 @@ def get_current_user():
     )
 
 
-@app.route("/contract/api/get_user_by_id/<string:id>")
+@app.route("/contract/api/get_user_by_id/<string:id>", methods=["GET"])
 def get_user_by_id(id):
     user = User.query.filter_by(id=id).first()
     return jsonify(
@@ -109,7 +109,7 @@ def get_user_by_id(id):
     ), 200
 
 
-@app.route("/contract/api/get_all_users")
+@app.route("/contract/api/get_all_users", methods=["GET"])
 def get_all_user():
     # user_id = session.get("user_id")
     #
@@ -178,10 +178,10 @@ def login_user():
     )
 
 
-@app.route("/logout", methods=["POST"])
+@app.route("/logout", methods=["GET"])
 def logout_user():
     session.pop("user_id")
-    return "200"
+    return jsonify({"logout":"logout successfully"}),200
 
 
 '''
@@ -231,8 +231,7 @@ def add_room_members():
         member_exists = RoomMember.query.filter_by(user_id=record["user_id"],
                                                    room_id=record["room_id"]).first() is not None
         if member_exists:
-            pass
-            # return jsonify({"error": "Member already exist with this name"}), 409
+            return jsonify({"error": "Member already exist with this name"}), 409
         else:
             new_room_member = RoomMember(user_id=record["user_id"], room_id=record["room_id"],
                                          added_by=record["added_by"])
@@ -251,7 +250,7 @@ def add_room_members():
     # db.session.commit()
 
 
-@app.route("/contract/api/get_room_by_id/<string:id>")
+@app.route("/contract/api/get_room_by_id/<string:id>", methods=["GET"])
 def get_room_by_id(id):
     room = Room.query.filter_by(room_id=id).first()
     data = {
@@ -263,7 +262,7 @@ def get_room_by_id(id):
     return jsonify({"response": data}), 200
 
 
-@app.route("/contract/api/get_rooms")
+@app.route("/contract/api/get_rooms", methods=["GET"])
 def get_rooms():
     result = []
     rooms = Room.query.all()
