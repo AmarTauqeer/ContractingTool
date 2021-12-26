@@ -1,13 +1,11 @@
-from flaskcontract import app, socketio,bcrypt
+from flaskcontract import app, socketio, bcrypt
 # from flask_bcrypt import Bcrypt
 import datetime
 from flaskcontract.models import Chat, User, Room, RoomMember, db
-from flask_apispec import marshal_with
-from marshmallow import Schema, fields
 from flask import request, session
 from flask.json import jsonify
+from functools import wraps
 
-# bcrypt=Bcrypt(app)
 
 @socketio.on("chat")
 def handle_chat_event(data):
@@ -20,27 +18,33 @@ def handle_chat_event(data):
     socketio.emit("chat", data)
 
 
-class AuthenticationSchema(Schema):
-    Email = fields.String(required=False, description="Email")
-    Password = fields.String(required=False, description="Password")
+'''
+decorator for session
+'''
 
 
-class RoomSchema(Schema):
-    RoomName = fields.String(required=False, description="Room name")
-    CreatedBy = fields.String(required=False, description="Created by")
-    CreatedAt = fields.DateTime(required=False, description="Created at")
-    UserId = fields.String(required=False, description="User id")
+def check_for_session(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        user_id = session.get("user_id")
+        if not user_id:
+            return jsonify({"error": "Unauthorized"}), 401
+        return func(*args, **kwargs)
+
+    return wrapped
 
 
-class RoomMemberSchema(Schema):
-    RoomMemberName = fields.String(required=False, description="Room member name")
-    RoomId = fields.String(required=False, description="Room id")
-    AddedBy = fields.String(required=False, description="Added by")
-    AddedAt = fields.DateTime(required=False, description="Added at")
+'''
+end decorator for session
+'''
+
+'''
+routes for chat message
+'''
 
 
 @app.route("/contract/api/addmessage", methods=["POST"])
-# @marshal_with(RoomSchema)
+@check_for_session
 def add_chat_message():
     room_member_id = request.json["room_member_id"]
     room_id = request.json["room_id"]
@@ -58,6 +62,7 @@ def add_chat_message():
 
 
 @app.route("/contract/api/chat/<string:roomid>", methods=["GET"])
+@check_for_session
 def get_chat_data(roomid):
     resulted_arry = []
     chat_messages = Chat.query.filter_by(room_id=roomid).all()
@@ -82,23 +87,30 @@ def get_chat_data(roomid):
         return jsonify({"Error": "No record is found or there are some issues"}), 202
 
 
+'''
+end routes for chat message
+'''
+
+'''
+routes for user management
+'''
+
+
 @app.route("/contract/api/get_user", methods=["GET"])
+@check_for_session
 def get_current_user():
     user_id = session.get("user_id")
-
-    if not user_id:
-        return jsonify({"error": "Unauthorized"}), 401
-
     user = User.query.filter_by(id=user_id).first()
     return jsonify(
         {
             "id": user.id,
             "email": user.email,
         }
-    )
+    ), 200
 
 
 @app.route("/contract/api/get_user_by_id/<string:id>", methods=["GET"])
+@check_for_session
 def get_user_by_id(id):
     user = User.query.filter_by(id=id).first()
     return jsonify(
@@ -110,12 +122,8 @@ def get_user_by_id(id):
 
 
 @app.route("/contract/api/get_all_users", methods=["GET"])
+@check_for_session
 def get_all_user():
-    # user_id = session.get("user_id")
-    #
-    # if not user_id:
-    #     return jsonify({"error": "Unauthorized"}), 401
-
     resulted_arry = []
     users = User.query.all()
     for user in users:
@@ -132,7 +140,6 @@ def get_all_user():
 
 
 @app.route("/contract/api/register", methods=["POST"])
-@marshal_with(AuthenticationSchema)
 def register_user():
     email = request.json["email"]
     password = request.json["password"]
@@ -142,11 +149,8 @@ def register_user():
     if user_exists:
         return jsonify({"error": "User already exist with this email"}), 409
 
-
     hashed_password = bcrypt.generate_password_hash(password)
-    # print("haspassword  : {}".format(hashed_password))
     new_user = User(email=email, password=hashed_password)
-    # print("new user password  : {}".format(new_user.password))
     db.session.add(new_user)
     db.session.commit()
     session["user_id"] = new_user.id
@@ -155,7 +159,6 @@ def register_user():
 
 
 @app.route("/contract/api/login", methods=["POST"])
-@marshal_with(AuthenticationSchema)
 def login_user():
     email = request.json["email"]
     password = request.json["password"]
@@ -175,14 +178,19 @@ def login_user():
             "id": user.id,
             "email": user.email,
         }
-    )
+    ), 200
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/contract/api/logout", methods=["GET"])
+@check_for_session
 def logout_user():
     session.pop("user_id")
-    return jsonify({"logout":"logout successfully"}),200
+    return jsonify({"logout": "logout successfully"}), 200
 
+
+'''
+end routes for user management
+'''
 
 '''
     Room and room members
@@ -190,7 +198,7 @@ def logout_user():
 
 
 @app.route("/contract/api/addroom", methods=["POST"])
-@marshal_with(RoomSchema)
+@check_for_session
 def add_room():
     room_name = request.json["room_name"]
     created_by = request.json["created_by"]
@@ -212,11 +220,11 @@ def add_room():
             "created_by": new_room.created_by,
             "created_at": new_room.created_at,
         }
-    )
+    ), 200
 
 
 @app.route("/contract/api/addmembers", methods=["POST"])
-@marshal_with(RoomMemberSchema)
+@check_for_session
 def add_room_members():
     request_data = request.get_json()
 
@@ -227,7 +235,6 @@ def add_room_members():
             'added_by': data["added_by"],
 
         }
-        # print(record)
         member_exists = RoomMember.query.filter_by(user_id=record["user_id"],
                                                    room_id=record["room_id"]).first() is not None
         if member_exists:
@@ -240,17 +247,9 @@ def add_room_members():
 
     return jsonify({"Success": "Members inserted successfully"}), 200
 
-    # member_exists = RoomMember.query.filter_by(user_id=user_id, room_id=room_id).first() is not None
-    #
-    # if member_exists:
-    #     return jsonify({"error": "Member already exist with this name"}), 409
-    #
-    # new_room_member = RoomMember(user_id=user_id,room_id=room_id, added_by=added_by)
-    # db.session.add(new_room_member)
-    # db.session.commit()
-
 
 @app.route("/contract/api/get_room_by_id/<string:id>", methods=["GET"])
+@check_for_session
 def get_room_by_id(id):
     room = Room.query.filter_by(room_id=id).first()
     data = {
@@ -263,6 +262,7 @@ def get_room_by_id(id):
 
 
 @app.route("/contract/api/get_rooms", methods=["GET"])
+@check_for_session
 def get_rooms():
     result = []
     rooms = Room.query.all()
@@ -278,6 +278,7 @@ def get_rooms():
 
 
 @app.route("/contract/api/delete_room/<string:id>", methods=["GET"])
+@check_for_session
 def delete_room(id):
     delete_room = Room.query.filter_by(room_id=id).first()
     db.session.delete(delete_room)
@@ -286,8 +287,8 @@ def delete_room(id):
 
 
 @app.route("/contract/api/get_room_members/<string:roomid>", methods=["GET"])
+@check_for_session
 def get_room_members(roomid):
-    # print(roomid)
     result = []
     members = RoomMember.query.filter_by(room_id=roomid).all()
     for member in members:
@@ -298,15 +299,14 @@ def get_room_members(roomid):
             "added_at": member.added_at,
         }
         result.append(data)
-        # print(result)
     return jsonify({"response": result}), 200
 
 
 @app.route("/contract/api/get_room_member_byid/<string:id>", methods=["GET"])
+@check_for_session
 def get_room_member_byid(id):
     member = RoomMember.query.filter_by(room_member_id=id).first()
     user = User.query.filter_by(id=member.user_id).first()
-    # print(member.room_member_id)
     data = {
         "room_member_id": member.room_member_id,
         "user_id": member.user_id,
@@ -314,11 +314,11 @@ def get_room_member_byid(id):
         "added_by": member.added_by,
         "added_at": member.added_at,
     }
-    # print(result)
     return jsonify({"response": data}), 200
 
 
 @app.route("/contract/api/delete_room_member/<string:id>", methods=["GET"])
+@check_for_session
 def delete_room_member(id):
     delete_member = RoomMember.query.filter_by(room_member_id=id).first()
     db.session.delete(delete_member)

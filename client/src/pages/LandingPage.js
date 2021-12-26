@@ -8,7 +8,7 @@ const LandingPage = () => {
   const [roomMember, setRoomMember] = useState([]);
 
   const logoutUser = async () => {
-    await httpClient.get("//localhost:5000/logout");
+    await httpClient.get("//localhost:5000/contract/api/logout");
     window.location.href = "/";
   };
 
