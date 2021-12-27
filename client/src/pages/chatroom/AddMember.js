@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import httpClient from "../../httpClient";
 
-const AddRoom = () => {
+const AddMember = () => {
   const [memberName, setMemberName] = useState("");
-  const [memberSelection, setMemberSelection] = useState(false);
-  const [addedBy, setAddedBy] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [message, setMessage] = useState("");
   const [user, setUser] = useState({});
   const [users, setUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [stateErrors, setStateErrors] = useState({
+    memberNameError: "",
+  });
 
   const param = useParams();
-  // console.log(memberSelection);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -39,93 +38,118 @@ const AddRoom = () => {
       }
     })();
     if (user) {
-      setAddedBy(user.email);
+      setCreatedBy(user.email);
     }
   }, []);
 
+  const validate = () => {
+    let memberNameError = "";
+
+    if (memberName === "") {
+      memberNameError = "Name is required.";
+    }
+
+    if (memberNameError) {
+      setStateErrors({
+        memberNameError,
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(selectedUsers);
+    console.log(memberName);
 
-    let data = [];
+    const isValid = validate();
 
-    for (let index = 0; index < selectedUsers.length; index++) {
-      const element = selectedUsers[index];
-      let newData = {
-        user_id: element.id,
-        email: element.email,
+    if (isValid) {
+      let data = {
+        user_id: memberName,
         room_id: param.id,
         added_by: user.id,
       };
-      data.push(newData);
-    }
 
-    try {
-      await httpClient.post("//localhost:5000/contract/api/addmembers", data);
-
-      navigate("/roommembers/" + param.id);
-    } catch (error) {
-      if (error.response.status === 401) {
-        alert("Record can't be inserted!");
+      const resp = await httpClient.post(
+        "//localhost:5000/contract/api/addmembers",
+        data
+      );
+      if (resp.status === 200) {
+        setMessage("Record inserted successfully");
+      } else {
+        setMessage("Record can't be inserted");
+      }
+      if (resp.status === 409) {
+        setMessage("Member already exist");
       }
     }
   };
-
   return (
-    <div className="mb-3 mt-3">
-      <h3 className="mb-3">Add Room Members</h3>
-      <table className="table table-striped w-75 border">
-        {users && (
+    <div>
+      <h3>Room Member</h3>
+      <div>{message && message}</div>
+      <form>
+        <div class="row col-sm-4">
+          <label for="inputName" class="col-sm-4 col-form-label">
+            Name
+          </label>
+          <div class="col-sm-8">
+            <select
+              name="memberName"
+              className="form-select"
+              onChange={(e) => setMemberName(e.target.value)}
+            >
+              {users.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.email}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        {stateErrors.roomNameError && (
           <>
-            {users.map((x, index) => {
-              return (
-                <>
-                  <thead>
-                    <tr key={index}>
-                      <td>{x.id}</td>
-                      <td>{x.email}</td>
-                      <td>
-                        <input
-                          name="user"
-                          value={memberSelection}
-                          type="checkbox"
-                          onChange={(e) => {
-                            setMemberSelection(e.target.checked);
-                            const data = {
-                              id: x.id,
-                              email: x.email,
-                              value: e.target.checked,
-                            };
-                            if (data.value === true) {
-                              selectedUsers.push(data);
-                            } else {
-                              const filterdata = selectedUsers.filter(
-                                (x) =>
-                                  x.id !== data.id && x.email !== data.email
-                              );
-                              setSelectedUsers(filterdata);
-                            }
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  </thead>
-                </>
-              );
-            })}
+            <div class="row col-sm-4">
+              <label for="inputName" class="col-sm-4 col-form-label"></label>
+              <div class="col-sm-8">
+                <span className="error">
+                  {stateErrors.roomNameError && stateErrors.roomNameError}
+                </span>
+              </div>
+            </div>
           </>
         )}
-      </table>
-      <form>
-        <button onClick={handleSubmit} className="btn btn-sm btn-success">
-          Submit
-        </button>
-        <div className="col-sm-3">
-          <Link to={"/roommembers/" + param.id}>Back to room members</Link>
+
+        <div class="row col-sm-4">
+          <label for="inputCreateBy" class="col-sm-4 col-form-label">
+            Created By
+          </label>
+          <div class="col-sm-8">
+            <input
+              name="createdBy"
+              type="text"
+              className="form-control form-control-sm"
+              value={user && user.email}
+              onChange={(e) => setCreatedBy(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div class="row col-sm-4">
+          <label for="inputCreateBy" class="col-sm-4 col-form-label"></label>
+          <div class="col-sm-8">
+            <button className="btn btn-sm btn-success" onClick={handleSubmit}>
+              Submit
+            </button>
+          </div>
+          <p>
+            <Link to={"/roommembers/" + param.id}>Back to room members</Link>
+          </p>
         </div>
       </form>
     </div>
   );
 };
 
-export default AddRoom;
+export default AddMember;

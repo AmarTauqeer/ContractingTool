@@ -87,6 +87,18 @@ def get_chat_data(roomid):
         return jsonify({"Error": "No record is found or there are some issues"}), 202
 
 
+@app.route("/contract/api/chat/delete/<string:roomid>", methods=["DELETE"])
+@check_for_session
+def delete_chat_data(roomid):
+    chat_messages = Chat.query.filter_by(room_id=roomid).all()
+    for message in chat_messages:
+        chat_message = Chat.query.filter_by(chat_id=message.chat_id, room_id=roomid).first()
+        db.session.delete(chat_message)
+    db.session.commit()
+
+    return jsonify({"Success": "Message deleted from the chat room"}), 200
+
+
 '''
 end routes for chat message
 '''
@@ -226,26 +238,28 @@ def add_room():
 @app.route("/contract/api/addmembers", methods=["POST"])
 @check_for_session
 def add_room_members():
-    request_data = request.get_json()
+    user_id = request.json["user_id"]
+    room_id = request.json["room_id"]
+    added_by = request.json["added_by"]
 
-    for data in request_data:
-        record = {
-            'user_id': data["user_id"],
-            'room_id': data["room_id"],
-            'added_by': data["added_by"],
+    room_member_exists = RoomMember.query.filter_by(user_id=user_id, room_id=room_id).first() is not None
 
+    if room_member_exists:
+        return jsonify({"error": "Room member already exist"}), 409
+
+    new_room_member = RoomMember(user_id=user_id, room_id=room_id, added_by=added_by)
+    # print(new_room_member.room_id)
+    db.session.add(new_room_member)
+    db.session.commit()
+
+    return jsonify(
+        {
+            "id": new_room_member.room_id,
+            "user_id": new_room_member.user_id,
+            "added_by": new_room_member.added_by,
+            "added_at": new_room_member.added_at,
         }
-        member_exists = RoomMember.query.filter_by(user_id=record["user_id"],
-                                                   room_id=record["room_id"]).first() is not None
-        if member_exists:
-            return jsonify({"error": "Member already exist with this name"}), 409
-        else:
-            new_room_member = RoomMember(user_id=record["user_id"], room_id=record["room_id"],
-                                         added_by=record["added_by"])
-            db.session.add(new_room_member)
-        db.session.commit()
-
-    return jsonify({"Success": "Members inserted successfully"}), 200
+    ), 200
 
 
 @app.route("/contract/api/get_room_by_id/<string:id>", methods=["GET"])
@@ -320,6 +334,10 @@ def get_room_member_byid(id):
 @app.route("/contract/api/delete_room_member/<string:id>", methods=["GET"])
 @check_for_session
 def delete_room_member(id):
+    # check if chat exist
+    chat = Chat.query.filter_by(room_member_id=id).first()
+    if chat:
+        return jsonify({"Error": "Can't delete member chat messages exist"}), 200
     delete_member = RoomMember.query.filter_by(room_member_id=id).first()
     db.session.delete(delete_member)
     db.session.commit()

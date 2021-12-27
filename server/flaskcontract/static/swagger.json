@@ -516,6 +516,34 @@
           }
         }
       }
+    },
+    "/contract/api/chat/delete/{roomid}": {
+      "delete": {
+        "tags": [
+          "Delete chat message"
+        ],
+        "summary": "Delete chat message by room id",
+        "parameters": [
+          {
+            "name": "roomid",
+            "in": "path",
+            "description": "room id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
     }
   }
 }

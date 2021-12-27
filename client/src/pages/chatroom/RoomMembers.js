@@ -38,6 +38,11 @@ const Room = () => {
         const resp = await httpClient.get(
           `//localhost:5000/contract/api/delete_room_member/${memberid}`
         );
+        // console.log(resp.data["Error"]);
+        if (resp.data["Error"]) {
+          alert(resp.data["Error"]);
+          return false;
+        }
         window.location.reload(false);
       } catch (error) {
         console.log("No room member available");
