@@ -71,7 +71,7 @@ const AddRoom = () => {
       };
 
       try {
-        await httpClient.post("//localhost:5000/contract/api/addroom", data);
+        await httpClient.post("//localhost:5000/contract/api/add_room", data);
 
         navigate("/");
       } catch (error) {

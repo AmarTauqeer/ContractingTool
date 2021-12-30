@@ -93,7 +93,7 @@ const LandingPage = () => {
                             <td>{x.id}</td>
                             <td>{x.room_name}</td>
                             <td>
-                              <Link to={`/roommembers/${x.id}`}>
+                              <Link to={`/room-members/${x.id}`}>
                                 Member Detail
                               </Link>
                             </td>

@@ -93,7 +93,7 @@ const Room = () => {
       </table>
       <div className="row">
         <div className="col-sm-2">
-          <Link to={`/addmember/${param.id}`}>Add Member</Link>
+          <Link to={`/add-member/${param.id}`}>Add Member</Link>
         </div>
         <div className="col-sm-3">
           <Link to={`/`}>Back to Room</Link>

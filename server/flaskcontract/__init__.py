@@ -38,3 +38,6 @@ with app.app_context():
     db.create_all()
 
 from flaskcontract import routes
+from flaskcontract import contract_routes
+from flaskcontract import user_management_routes
+from flaskcontract import message_routes

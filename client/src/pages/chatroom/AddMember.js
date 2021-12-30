@@ -20,6 +20,7 @@ const AddMember = () => {
         const resp = await httpClient.get(
           "//localhost:5000/contract/api/get_user"
         );
+        setMemberName(resp.data.id);
         setUser(resp.data);
       } catch (error) {
         console.log("Not authenticated");
@@ -60,7 +61,6 @@ const AddMember = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(memberName);
 
     const isValid = validate();
 
@@ -72,7 +72,7 @@ const AddMember = () => {
       };
 
       const resp = await httpClient.post(
-        "//localhost:5000/contract/api/addmembers",
+        "//localhost:5000/contract/api/add_members",
         data
       );
       if (resp.status === 200) {
@@ -89,6 +89,7 @@ const AddMember = () => {
     <div>
       <h3>Room Member</h3>
       <div>{message && message}</div>
+
       <form>
         <div class="row col-sm-4">
           <label for="inputName" class="col-sm-4 col-form-label">
@@ -98,7 +99,10 @@ const AddMember = () => {
             <select
               name="memberName"
               className="form-select"
-              onChange={(e) => setMemberName(e.target.value)}
+              value={memberName}
+              onChange={(e) => {
+                setMemberName(e.currentTarget.value);
+              }}
             >
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
@@ -144,7 +148,7 @@ const AddMember = () => {
             </button>
           </div>
           <p>
-            <Link to={"/roommembers/" + param.id}>Back to room members</Link>
+            <Link to={"/room-members/" + param.id}>Back to room members</Link>
           </p>
         </div>
       </form>

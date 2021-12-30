@@ -72,7 +72,7 @@
           }
         }
       },
-      "ChatMessage": {
+      "Message": {
         "type": "object",
         "properties": {
           "room_member_id": {
@@ -85,6 +85,86 @@
             "type": "string"
           },
           "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Contract": {
+        "type": "object",
+        "properties": {
+          "ContractId": {
+            "type": "string"
+          },
+          "Purpose": {
+            "type": "string"
+          },
+          "StartDate": {
+            "type": "string"
+          },
+          "EffectiveDate": {
+            "type": "string"
+          },
+          "ExecutionDate": {
+            "type": "string"
+          },
+          "ExpireDate": {
+            "type": "string"
+          },
+          "ContractProvider": {
+            "type": "string"
+          },
+          "ContractRequester": {
+            "type": "string"
+          },
+          "DataController": {
+            "type": "string"
+          },
+          "ContractType": {
+            "type": "string"
+          },
+          "ContractStatus": {
+            "type": "string"
+          },
+          "Amendment": {
+            "type": "string"
+          },
+          "ConfidentialityObligation": {
+            "type": "string"
+          },
+          "DataProtection": {
+            "type": "string"
+          },
+          "LimitationOnUse": {
+            "type": "string"
+          },
+          "Medium": {
+            "type": "string"
+          },
+          "MethodOfNotice": {
+            "type": "string"
+          },
+          "NoThirdPartyBeneficiaries": {
+            "type": "string"
+          },
+          "PermittedDisclosure": {
+            "type": "string"
+          },
+          "ReceiptOfNotice": {
+            "type": "string"
+          },
+          "Severability": {
+            "type": "string"
+          },
+          "TerminationForInsolvency": {
+            "type": "string"
+          },
+          "TerminationForMaterialBreach": {
+            "type": "string"
+          },
+          "TerminationOnNotice": {
+            "type": "string"
+          },
+          "Waiver": {
             "type": "string"
           }
         }
@@ -158,7 +238,7 @@
         }
       }
     },
-    "/contract/api/addroom": {
+    "/contract/api/add_room": {
       "post": {
         "tags": [
           "Add Room"
@@ -191,19 +271,19 @@
         }
       }
     },
-    "/contract/api/addmessage": {
+    "/contract/api/add_message": {
       "post": {
         "tags": [
           "Add Message"
         ],
-        "summary": "Adding messages",
+        "summary": "Adding new message",
         "requestBody": {
           "description": "Message information",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ChatMessage"
+                "$ref": "#/components/schemas/Message"
               }
             }
           }
@@ -212,19 +292,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/components/schemas/ChatMessage"
+              "$ref": "#/components/schemas/Message"
             }
           },
           "404": {
             "description": "NOT FOUND",
             "schema": {
-              "$ref": "#/components/schemas/ChatMessage"
+              "$ref": "#/components/schemas/Message"
             }
           }
         }
       }
     },
-    "/contract/api/addmembers": {
+    "/contract/api/add_members": {
       "post": {
         "tags": [
           "Add Room Members"
@@ -273,10 +353,10 @@
         }
       }
     },
-    "/contract/api/chat/{roomid}": {
+    "/contract/api/message/{roomid}": {
       "get": {
         "tags": [
-          "Get Message By Id"
+          "Get message by room id"
         ],
         "summary": "Get message based on a room",
         "parameters": [
@@ -363,6 +443,212 @@
           "Get all users"
         ],
         "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/create": {
+      "post": {
+        "tags": [
+          "Create"
+        ],
+        "summary": "New contract",
+        "requestBody": {
+          "description": "Contract information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Contract"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/components/schemas/Contract"
+            }
+          }
+        }
+      }
+    },
+    "/contract/api/update/{id}": {
+      "put": {
+        "tags": [
+          "Update"
+        ],
+        "summary": "Update the contract",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "contract id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Contract information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Contract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Contract"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/components/schemas/Contract"
+            }
+          }
+        }
+      }
+    },
+    "/contract/api/get_all_contracts": {
+      "get": {
+        "tags": [
+          "Get all contracts"
+        ],
+        "summary": "Get all contracts",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_contract_by_id/{id}": {
+      "get": {
+        "tags": [
+          "Get contract By Id"
+        ],
+        "summary": "Get contract by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "contract id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_contract_by_provider/{name}": {
+      "get": {
+        "tags": [
+          "Get contract By provider"
+        ],
+        "summary": "Get contract by provider",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "provider",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/get_contract_by_requester/{name}": {
+      "get": {
+        "tags": [
+          "Get contract By requester"
+        ],
+        "summary": "Get contract by requester",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "requester",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/contract/api/contract_delete_by_id/{id}": {
+      "delete": {
+        "tags": [
+          "Delete contract"
+        ],
+        "summary": "Delete contract by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "contract id",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -461,7 +747,7 @@
         }
       }
     },
-    "/contract/api/get_room_member_byid/{id}": {
+    "/contract/api/get_room_member_by_id/{id}": {
       "get": {
         "tags": [
           "Get room member by id"
@@ -517,12 +803,12 @@
         }
       }
     },
-    "/contract/api/chat/delete/{roomid}": {
+    "/contract/api/message/delete/{roomid}": {
       "delete": {
         "tags": [
-          "Delete chat message"
+          "Delete message"
         ],
-        "summary": "Delete chat message by room id",
+        "summary": "Delete messages by room id",
         "parameters": [
           {
             "name": "roomid",

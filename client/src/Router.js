@@ -9,6 +9,7 @@ import AddMember from "./pages/chatroom/AddMember";
 import Chat from "./pages/chatroom/Chat";
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
+import AddObligationSection from "./pages/chatroom/AddObligationSection";
 const Router = () => {
   return (
     <BrowserRouter>
@@ -21,8 +22,13 @@ const Router = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/addroom" element={<AddRoom />} />
-          <Route exact path="/addmember/:id" element={<AddMember />} />
-          <Route exact path="/roommembers/:id" element={<RoomMembers />} />
+          <Route exact path="/add-member/:id" element={<AddMember />} />
+          <Route exact path="/room-members/:id" element={<RoomMembers />} />
+          <Route
+            exact
+            path="/add-obligation-section/:userid/:roomid"
+            element={<AddObligationSection />}
+          />
         </Routes>
         <Footer />
       </div>

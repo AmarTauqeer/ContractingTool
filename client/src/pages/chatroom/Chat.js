@@ -13,6 +13,8 @@ const Chat = () => {
   const [email, setEmail] = useState("");
   const [roomName, setRoomName] = useState("");
   const [chat, setChat] = useState([]);
+  const [section, setSection] = useState([]);
+  const [sectionId, setSectionId] = useState("");
 
   const params = useParams();
 
@@ -31,10 +33,23 @@ const Chat = () => {
     }
   };
 
+  const getObligationSection = async () => {
+    try {
+      const res = await httpClient.get(
+        `//localhost:5000/contract/api/get_obligation_section`
+      );
+      const result = res.data.response;
+      setSectionId(res.data.response[0].id);
+      setSection(result);
+    } catch (error) {
+      console.log("No section is available");
+    }
+  };
+
   const getChatMessages = async (id) => {
     try {
       const res = await httpClient.get(
-        `//localhost:5000/contract/api/chat/${id}`
+        `//localhost:5000/contract/api/message/${id}`
       );
       // console.log(res.data.response);
       const result = res.data.response;
@@ -62,10 +77,11 @@ const Chat = () => {
     getRoomMemberId(params.roomid);
     getChatMessages(params.roomid);
     getRoom(params.roomid);
+    getObligationSection();
   }, []);
 
   useEffect(() => {
-    socket.on("chat", (payload) => {
+    socket.on("Message", (payload) => {
       // console.log(payload);
       setChat([...chat, payload]);
     });
@@ -92,12 +108,6 @@ const Chat = () => {
     }
   };
 
-  const scrollToBottom = () => alert("h");
-  window.scrollTo({
-    top: document.documentElement.scrollHeight,
-    behavior: "smooth",
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -111,12 +121,13 @@ const Chat = () => {
       const created_at = created_date.substring(-1, 28);
 
       const email = await getUserEmail(params.userid);
-      socket.emit("chat", {
+      socket.emit("Message", {
         room_id,
         room_member_id,
         created_at,
         email,
         message,
+        sectionId,
       });
       setMessage("");
     }
@@ -126,6 +137,34 @@ const Chat = () => {
       {member.length !== 0 ? (
         <>
           <h3 className="mb-3">Chat {roomName && <span>{roomName}</span>} </h3>
+          <div class="row col-sm-4">
+            <label for="inputCreateBy" class="col-sm-4 col-form-label">
+              Section
+            </label>
+            <div class="col-sm-8">
+              <select
+                name="sectionId"
+                className="form-select"
+                value={sectionId}
+                onChange={(e) => {
+                  setSectionId(e.currentTarget.value);
+                }}
+              >
+                {section.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <Link
+            to={`/add-obligation-section/${params.userid}/${params.roomid}`}
+          >
+            Add new section
+          </Link>
+
           <ReactScrollableFeed>
             <br />
             <table className="table table-striped">
