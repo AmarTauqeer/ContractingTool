@@ -1,0 +1,50 @@
+.chat .row {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 12px 12px 22px;
+}
+
+.chat h3 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.chat-form-select {
+  height: 40px;
+  width: 50%;
+  border: none;
+  outline: none;
+  -webkit-box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+  box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+}
+.chat-inp {
+  height: 40px;
+  width: 55%;
+  border: none;
+  outline: none;
+  -webkit-box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+  box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+}
+.chat-btn {
+  height: 40px;
+  width: 10%;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  background: orangered;
+  color: white;
+}
+.chat .btn:hover {
+  background: rgb(163, 11, 11);
+  transition: 01s;
+}
+
+/* ::-webkit-scrollbar {
+  width: 25px;
+}
+::-webkit-scrollbar-track {
+  background: green;
+}
+::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(red, yellow);
+  border-radius: 25px;
+} */

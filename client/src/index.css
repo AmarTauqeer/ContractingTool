@@ -11,28 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 } */
-button {
+/* button {
   margin: 5px;
   padding: 5px;
 }
 button > a {
   text-decoration: none;
   color: white;
-}
-label {
+} */
+/* label {
   font-size: 18px;
   font-weight: 400;
-}
-input {
+} */
+
+.error {
   font-size: 18px;
-}
-::-webkit-scrollbar {
-  width: 25px;
-}
-::-webkit-scrollbar-track {
-  background: green;
-}
-::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(red, yellow);
-  border-radius: 25px;
+  color: rgb(231, 9, 9);
+  font-weight: 600;
 }

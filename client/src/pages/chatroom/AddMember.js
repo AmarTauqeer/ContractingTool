@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import httpClient from "../../httpClient";
+import "./addmember.css";
 
 const AddMember = () => {
   const [memberName, setMemberName] = useState("");
@@ -86,73 +87,75 @@ const AddMember = () => {
     }
   };
   return (
-    <div>
-      <h3>Room Member</h3>
-      <div>{message && message}</div>
-
-      <form>
-        <div class="row col-sm-4">
-          <label for="inputName" class="col-sm-4 col-form-label">
-            Name
-          </label>
-          <div class="col-sm-8">
-            <select
-              name="memberName"
-              className="form-select"
-              value={memberName}
-              onChange={(e) => {
-                setMemberName(e.currentTarget.value);
-              }}
-            >
-              {users.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.email}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        {stateErrors.roomNameError && (
-          <>
-            <div class="row col-sm-4">
-              <label for="inputName" class="col-sm-4 col-form-label"></label>
-              <div class="col-sm-8">
-                <span className="error">
-                  {stateErrors.roomNameError && stateErrors.roomNameError}
-                </span>
-              </div>
+    <>
+      <section className="member pt-5">
+        <div className="container w-50">
+          <div className="row g-0">
+            <div className="text-center py-4">
+              <h3>Room Member</h3>
+              <div>{message && message}</div>
+              <form>
+                <div className="form-row pt-5">
+                  <div className="offset-1 col-lg-10">
+                    <select
+                      name="memberName"
+                      className="form-select"
+                      value={memberName}
+                      onChange={(e) => {
+                        setMemberName(e.currentTarget.value);
+                      }}
+                    >
+                      {users.map((u) => (
+                        <option key={u.id} value={u.id}>
+                          {u.email}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                {stateErrors.memberNameError && (
+                  <>
+                    <div className="form-row pt-2">
+                      <div class="col-lg-10">
+                        <span className="error">
+                          {stateErrors.memberNameError &&
+                            stateErrors.memberNameError}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="form-row py-3">
+                  <div className="offset-1 col-lg-10">
+                    <input
+                      name="createdBy"
+                      placeholder="Created by"
+                      type="text"
+                      className="member-inp px-3"
+                      value={user && user.email}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="form-row pt-5">
+                  <div class="offset-1 col-lg-10">
+                    <button className="member-btn" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                    <p>
+                      <Link to={"/room-members/" + param.id}>
+                        Back to room members
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+              </form>
             </div>
-          </>
-        )}
-
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label">
-            Created By
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="createdBy"
-              type="text"
-              className="form-control form-control-sm"
-              value={user && user.email}
-              onChange={(e) => setCreatedBy(e.target.value)}
-            />
           </div>
         </div>
-
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label"></label>
-          <div class="col-sm-8">
-            <button className="btn btn-sm btn-success" onClick={handleSubmit}>
-              Submit
-            </button>
-          </div>
-          <p>
-            <Link to={"/room-members/" + param.id}>Back to room members</Link>
-          </p>
-        </div>
-      </form>
-    </div>
+      </section>
+      <div></div>
+    </>
   );
 };
 

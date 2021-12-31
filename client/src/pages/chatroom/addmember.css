@@ -1,0 +1,31 @@
+.member .row {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 12px 12px 22px;
+}
+
+.member h3 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.member-inp {
+  height: 40px;
+  width: 100%;
+  border: none;
+  outline: none;
+  -webkit-box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+  box-shadow: 5px 10px 36px 0px rgba(0, 0, 0, 0.97);
+}
+.member-btn {
+  height: 40px;
+  width: 50%;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  background: orangered;
+  color: white;
+}
+.member .btn:hover {
+  background: rgb(163, 11, 11);
+  transition: 01s;
+}

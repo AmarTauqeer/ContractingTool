@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import httpClient from "../../httpClient";
+import "./roommember.css";
 const Room = () => {
   const [roomMember, setRoomMember] = useState([]);
   const [users, setUsers] = useState([]);
@@ -54,7 +55,7 @@ const Room = () => {
     <div className="mb-3 mt-3">
       <h3>List of Room Members</h3> <br />
       <table className="table table-striped w-75 border">
-        <thead class="table-dark">
+        <thead class="table-heading">
           <tr>
             <th scope="column">Member ID</th>
             <th scope="column">User ID</th>
@@ -82,7 +83,12 @@ const Room = () => {
                           ))}
                     </td>
                     <td>
-                      <button onClick={(e) => deleteMember(x.id)}>X</button>
+                      <button
+                        className="roommember-table-btn"
+                        onClick={(e) => deleteMember(x.id)}
+                      >
+                        <i class="bi bi-trash" style={{ fontSize: 25 }}></i>
+                      </button>
                     </td>
                   </tr>
                 </>

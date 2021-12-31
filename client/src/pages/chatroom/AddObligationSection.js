@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import httpClient from "../../httpClient";
+import "./section.css";
 
 const AddObligationSection = () => {
   const [name, setName] = useState("");
@@ -77,74 +78,71 @@ const AddObligationSection = () => {
     }
   };
   return (
-    <div>
-      <h3>Obligation Section</h3>
-
-      <form>
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label">
-            Room
-          </label>
-          <div class="col-sm-8">
-            <select
-              name="roomId"
-              className="form-select"
-              value={roomId}
-              onChange={(e) => {
-                setRoomId(e.currentTarget.value);
-              }}
-            >
-              {room.map((u) => (
-                <option key={u.room_id} value={u.room_id}>
-                  {u.room_name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div class="row col-sm-4">
-          <label for="inputName" class="col-sm-4 col-form-label">
-            Name
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="name"
-              type="text"
-              className="form-control form-control-sm"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-        </div>
-        {stateErrors.nameError && (
-          <>
-            <div class="row col-sm-4">
-              <label for="inputName" class="col-sm-4 col-form-label"></label>
-              <div class="col-sm-8">
-                <span className="error">
-                  {stateErrors.nameError && stateErrors.nameError}
-                </span>
-              </div>
+    <>
+      <section className="section pt-5">
+        <div className="container w-50">
+          <div className="row g-0">
+            <div className="text-center py-4">
+              <h3>Obligation Section</h3>
+              <form>
+                <div className="form-row pt-5">
+                  <div className="offset-1 col-lg-10">
+                    <select
+                      name="roomId"
+                      className="section-form-select"
+                      value={roomId}
+                      onChange={(e) => {
+                        setRoomId(e.currentTarget.value);
+                      }}
+                    >
+                      {room.map((u) => (
+                        <option key={u.room_id} value={u.room_id}>
+                          {u.room_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="form-row pt-3">
+                  <div className="offset-1 col-lg-10">
+                    <input
+                      name="name"
+                      type="text"
+                      className="section-inp px-3"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {stateErrors.nameError && (
+                  <>
+                    <div class="form-row pt-2">
+                      <div className="col-lg-10">
+                        <span className="error">
+                          {stateErrors.nameError && stateErrors.nameError}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="form-row pt-5">
+                  <div className="offset-1 col-lg-10">
+                    <button className="section-btn" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                    <p>
+                      <Link to={`/chat/${params.userid}/${params.roomid}`}>
+                        Back to chat
+                      </Link>
+                    </p>
+                  </div>
+                </div>
+              </form>
             </div>
-          </>
-        )}
-
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label"></label>
-          <div class="col-sm-8">
-            <button className="btn btn-sm btn-success" onClick={handleSubmit}>
-              Submit
-            </button>
           </div>
-          <p>
-            <Link to={`/chat/${params.userid}/${params.roomid}`}>
-              Back to chat
-            </Link>
-          </p>
         </div>
-      </form>
-    </div>
+      </section>
+    </>
   );
 };
 

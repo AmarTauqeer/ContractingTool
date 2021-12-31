@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import httpClient from "../httpClient";
+import "./landingpage.css";
 
 const LandingPage = () => {
   const [user, setUser] = useState({});
@@ -61,6 +62,9 @@ const LandingPage = () => {
                   <b>ID:</b>{" "}
                 </div>
                 <div className="col-sm-4">{user.id}</div>
+                <button onClick={logoutUser} className="landingpage-btn">
+                  Logout
+                </button>
               </div>
 
               <div className="row">
@@ -75,7 +79,7 @@ const LandingPage = () => {
               <br />
               {room.length == 0 && <p>No room is available</p>}
               <table className="table table-striped w-75 border">
-                <thead class="table-dark">
+                <thead class="table-heading">
                   <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
@@ -102,10 +106,14 @@ const LandingPage = () => {
                             </td>
                             <td>
                               <button
+                                className="landingpage-btn-table"
                                 onClick={(e) => deleteRoom(x.id)}
                                 // className="btn btn-sm btn-danger"
                               >
-                                X
+                                <i
+                                  class="bi bi-trash"
+                                  style={{ fontSize: 25 }}
+                                ></i>
                               </button>
                             </td>
                           </tr>
@@ -115,19 +123,14 @@ const LandingPage = () => {
                   </>
                 )}
               </table>
-
-              <br />
-              <button onClick={logoutUser} className="btn btn-danger">
-                Logout
-              </button>
             </>
           ) : (
             <>
               <p>You are not logged in</p>
-              <button className="btn btn-primary">
+              <button className="landingpage-btn">
                 <Link to="/login">Login</Link>
               </button>
-              <button className="btn btn-primary">
+              <button className="landingpage-btn">
                 <Link to="/register">Register</Link>
               </button>
             </>

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import httpClient from "../../httpClient";
+import login_img from "../../images/login.jpg";
+import "./login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -74,80 +76,87 @@ const Login = () => {
   };
 
   return (
-    <div className="container-md">
-      <h3 className="mb-3">Login</h3>
-      <form>
-        <div class="row col-sm-4">
-          <label for="inputEmail" class="col-sm-3 col-form-label">
-            Email
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="email"
-              type="email"
-              className="form-control form-control-sm"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
-        {stateErrors.emailError && (
-          <>
-            <div class="row col-sm-4">
-              <label for="inputEmail" class="col-sm-3 col-form-label"></label>
-              <div class="col-sm-8">
-                <span className="error">
-                  {stateErrors.emailError && stateErrors.emailError}
-                </span>
-              </div>
+    <>
+      <section className="login py-5">
+        <div className="container w-75">
+          <div className="row g-0">
+            <div className="col-lg-5 border-end border-dark">
+              <img
+                src={login_img}
+                alt="negotiation-img"
+                className="img-fluid"
+              />
             </div>
-          </>
-        )}
 
-        <div class="row col-sm-4">
-          <label for="inputPassword" class="col-sm-3 col-form-label">
-            Password
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="password"
-              type="password"
-              className="form-control form-control-sm"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
+            <div className="col-lg-7 text-center py-4">
+              <h3>Login</h3>
 
-        {stateErrors.passwordError && (
-          <>
-            <div class="row col-sm-4">
-              <label
-                for="inputPassword"
-                class="col-sm-3 col-form-label"
-              ></label>
-              <div class="col-sm-8">
-                <span className="error">
-                  {stateErrors.passwordError && stateErrors.passwordError}
-                </span>
-              </div>
+              <form>
+                <div className="form-row py-3 pt-5">
+                  <div class="col-lg-12">
+                    <input
+                      name="email"
+                      placeholder="Email"
+                      type="email"
+                      className="inp px-3"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {stateErrors.emailError && (
+                  <>
+                    <div className="form-row pay-3">
+                      <div class="col-lg-12">
+                        <span className="error">
+                          {stateErrors.emailError && stateErrors.emailError}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div className="form-row py-3">
+                  <div class="col-lg-12">
+                    <input
+                      name="password"
+                      placeholder="Password"
+                      type="password"
+                      className="inp px-3"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {stateErrors.passwordError && (
+                  <>
+                    <div className="form-row pay-3 pt-5">
+                      <div class="col-lg-12">
+                        <span className="error">
+                          {stateErrors.passwordError &&
+                            stateErrors.passwordError}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                <div className="form-row py-3 pt-5">
+                  <div class="col-lg-12">
+                    <button onClick={handleSubmit} className="btn1">
+                      Login
+                    </button>
+                    <button onClick={handleRegister} className="btn1">
+                      Register
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </>
-        )}
-
-        <div class="row col-sm-4">
-          <label for="inputEmail" class="col-sm-3 col-form-label"></label>
-          <div class="col-sm-8">
-            <button onClick={handleSubmit} className="btn btn-sm btn-success">
-              Login
-            </button>
-            <button onClick={handleRegister} className="btn btn-sm btn-success">
-              Register
-            </button>
           </div>
         </div>
-      </form>
-    </div>
+      </section>
+    </>
   );
 };
 

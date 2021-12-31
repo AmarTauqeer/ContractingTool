@@ -1,13 +1,9 @@
 import json
 import re
 
-from flaskcontract import app, socketio, bcrypt
-# from flask_bcrypt import Bcrypt
-import datetime
-from flaskcontract.models import Message, User, Room, RoomMember, db
+from flaskcontract import app
 from flask import request, session
 from flask.json import jsonify
-from functools import wraps
 from SPARQLWrapper import SPARQLWrapper, BASIC, JSON
 import textwrap
 from flaskcontract.routes import check_for_session
@@ -16,8 +12,8 @@ from flaskcontract.routes import check_for_session
     sparql setting
 '''
 
-HOST_URI_GET = 'http://amar-sti:7200/repositories/SmashHit-Beta'
-HOST_URI_POST = 'http://amar-sti:7200/repositories/SmashHit-Beta/statements'
+HOST_URI_GET = 'http://amar-sti:7200/repositories/SmashHit-Current'
+HOST_URI_POST = 'http://amar-sti:7200/repositories/SmashHit-Current/statements'
 user_name = 'admin'
 password = 'Sm@shHitA_CT00L'
 SECRET_KEY = 'amar'

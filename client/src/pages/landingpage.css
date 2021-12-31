@@ -1,0 +1,26 @@
+.landingpage-btn {
+  height: 40px;
+  width: 20%;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  background: orangered;
+  color: white;
+  margin-left: 5px;
+}
+.landingpage-btn > a {
+  text-decoration: none;
+  color: white;
+}
+.landingpage-btn:hover {
+  background: rgb(163, 11, 11);
+  transition: 01s;
+}
+.table-heading {
+  background: orangered;
+  color: white;
+}
+.landingpage-btn-table {
+  border: none;
+  color: red;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import httpClient from "../../httpClient";
+import "./rooms.css";
 
 const AddRoom = () => {
   const [roomName, setRoomName] = useState("");
@@ -82,65 +83,64 @@ const AddRoom = () => {
     }
   };
   return (
-    <div>
-      <h3>Room Information</h3>
-
-      <form>
-        <div class="row col-sm-4">
-          <label for="inputName" class="col-sm-4 col-form-label">
-            Room Name
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="roomName"
-              type="text"
-              className="form-control form-control-sm"
-              value={roomName}
-              onChange={(e) => setRoomName(e.target.value)}
-            />
-          </div>
-        </div>
-        {stateErrors.roomNameError && (
-          <>
-            <div class="row col-sm-4">
-              <label for="inputName" class="col-sm-4 col-form-label"></label>
-              <div class="col-sm-8">
-                <span className="error">
-                  {stateErrors.roomNameError && stateErrors.roomNameError}
-                </span>
-              </div>
+    <>
+      <section className="room pt-5">
+        <div className="container w-50">
+          <div className="row g-0 ">
+            <div className="text-center py-4">
+              <h3>Add New Room</h3>
+              <form>
+                <div className="form-row pt-5">
+                  <div class="offset-1 col-lg-10">
+                    <input
+                      name="roomName"
+                      placeholder="Room name"
+                      type="text"
+                      className="room-inp px-3"
+                      value={roomName}
+                      onChange={(e) => setRoomName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {stateErrors.roomNameError && (
+                  <>
+                    <div className="form-row pt-2">
+                      <div class="col-lg-10">
+                        <span className="error">
+                          {stateErrors.roomNameError &&
+                            stateErrors.roomNameError}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="form-row py-3">
+                  <div class="offset-1 col-lg-10">
+                    <input
+                      name="createdBy"
+                      placeholder="Created by"
+                      type="text"
+                      className="room-inp px-3"
+                      value={user && user.email}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="form-row pt-5">
+                  <div class="col-lg-12">
+                    <button className="room-btn1" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                    <br />
+                    <Link to={`/`}>Back to Room List</Link>
+                  </div>
+                </div>
+              </form>
             </div>
-          </>
-        )}
-
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label">
-            Created By
-          </label>
-          <div class="col-sm-8">
-            <input
-              name="createdBy"
-              type="text"
-              className="form-control form-control-sm"
-              value={user && user.email}
-              onChange={(e) => setCreatedBy(e.target.value)}
-            />
           </div>
         </div>
-
-        <div class="row col-sm-4">
-          <label for="inputCreateBy" class="col-sm-4 col-form-label"></label>
-          <div class="col-sm-8">
-            <button className="btn btn-sm btn-success" onClick={handleSubmit}>
-              Submit
-            </button>
-          </div>
-          <p>
-            <Link to={`/`}>Back to Room</Link>
-          </p>
-        </div>
-      </form>
-    </div>
+      </section>
+    </>
   );
 };
 
