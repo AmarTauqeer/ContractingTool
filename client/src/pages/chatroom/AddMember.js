@@ -88,69 +88,75 @@ const AddMember = () => {
   };
   return (
     <>
-      <section className="member pt-5">
-        <div className="container w-50">
-          <div className="row g-0">
-            <div className="text-center py-4">
-              <h3>Room Member</h3>
-              <div>{message && message}</div>
-              <form>
-                <div className="form-row pt-5">
-                  <div className="offset-1 col-lg-10">
-                    <select
-                      name="memberName"
-                      className="form-select"
-                      value={memberName}
-                      onChange={(e) => {
-                        setMemberName(e.currentTarget.value);
-                      }}
-                    >
-                      {users.map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.email}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+      <section className="member pt-5 w-50">
+        <div className="container">
+          <div className="py-4">
+            <h3 className="text-center">Room Member</h3>
+            <div>{message && message}</div>
+            <form>
+              <div className="row pt-5">
+                <label class="col-lg-3 col-form-label fw-bold">
+                  Member name:
+                </label>
+                <div className="col-lg-9">
+                  <select
+                    name="memberName"
+                    className="form-select"
+                    value={memberName}
+                    onChange={(e) => {
+                      setMemberName(e.currentTarget.value);
+                    }}
+                  >
+                    {users.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.email}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                {stateErrors.memberNameError && (
-                  <>
-                    <div className="form-row pt-2">
-                      <div class="col-lg-10">
-                        <span className="error">
-                          {stateErrors.memberNameError &&
-                            stateErrors.memberNameError}
-                        </span>
-                      </div>
+              </div>
+              {stateErrors.memberNameError && (
+                <>
+                  <div className="row pt-2">
+                    <label class="col-lg-3 col-form-label"></label>
+                    <div class="col-lg-9">
+                      <span className="error">
+                        {stateErrors.memberNameError &&
+                          stateErrors.memberNameError}
+                      </span>
                     </div>
-                  </>
-                )}
-                <div className="form-row py-3">
-                  <div className="offset-1 col-lg-10">
-                    <input
-                      name="createdBy"
-                      placeholder="Created by"
-                      type="text"
-                      className="member-inp px-3"
-                      value={user && user.email}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                    />
                   </div>
+                </>
+              )}
+              <div className="row py-3">
+                <label class="col-lg-3 col-form-label fw-bold">
+                  Created by:
+                </label>
+                <div className="col-lg-9">
+                  <input
+                    name="createdBy"
+                    placeholder="Created by"
+                    type="text"
+                    className="member-inp px-3"
+                    value={user && user.email}
+                    onChange={(e) => setCreatedBy(e.target.value)}
+                  />
                 </div>
-                <div className="form-row pt-5">
-                  <div class="offset-1 col-lg-10">
-                    <button className="member-btn" onClick={handleSubmit}>
-                      Submit
-                    </button>
-                    <p>
-                      <Link to={"/room-members/" + param.id}>
-                        Back to room members
-                      </Link>
-                    </p>
-                  </div>
+              </div>
+              <div className="row pt-2">
+                <label class="col-lg-3 col-form-label"></label>
+                <div class="col-lg-9">
+                  <button className="member-btn" onClick={handleSubmit}>
+                    Submit
+                  </button>
+                  <p>
+                    <Link to={"/room-members/" + param.id}>
+                      Back to room members
+                    </Link>
+                  </p>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </section>

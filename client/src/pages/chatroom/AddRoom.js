@@ -84,60 +84,67 @@ const AddRoom = () => {
   };
   return (
     <>
-      <section className="room pt-5">
-        <div className="container w-50">
-          <div className="row g-0 ">
-            <div className="text-center py-4">
-              <h3>Add New Room</h3>
-              <form>
-                <div className="form-row pt-5">
-                  <div class="offset-1 col-lg-10">
-                    <input
-                      name="roomName"
-                      placeholder="Room name"
-                      type="text"
-                      className="room-inp px-3"
-                      value={roomName}
-                      onChange={(e) => setRoomName(e.target.value)}
-                    />
-                  </div>
+      <section className="room pt-5 w-50">
+        <div className="container">
+          {/* <div className="row g-0 "> */}
+          <div className="py-4">
+            <h3 className="text-center">Add New Room</h3>
+            <form>
+              <div className="row pt-5">
+                <label class="col-lg-3 col-form-label fw-bold">
+                  Room name:
+                </label>
+                <div class="col-lg-9">
+                  <input
+                    name="roomName"
+                    placeholder="Room name"
+                    type="text"
+                    className="room-inp px-3"
+                    value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                  />
                 </div>
-                {stateErrors.roomNameError && (
-                  <>
-                    <div className="form-row pt-2">
-                      <div class="col-lg-10">
-                        <span className="error">
-                          {stateErrors.roomNameError &&
-                            stateErrors.roomNameError}
-                        </span>
-                      </div>
+              </div>
+              {stateErrors.roomNameError && (
+                <>
+                  <div className="row pt-3">
+                    <label class="col-lg-2 col-form-label"></label>
+                    <div class="offset-1 col-lg-9">
+                      <span className="error">
+                        {stateErrors.roomNameError && stateErrors.roomNameError}
+                      </span>
                     </div>
-                  </>
-                )}
-                <div className="form-row py-3">
-                  <div class="offset-1 col-lg-10">
-                    <input
-                      name="createdBy"
-                      placeholder="Created by"
-                      type="text"
-                      className="room-inp px-3"
-                      value={user && user.email}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                    />
                   </div>
+                </>
+              )}
+              <div className="row py-3">
+                <label class="col-lg-3 col-form-label fw-bold">
+                  Created by:
+                </label>
+                <div class="col-lg-9">
+                  <input
+                    name="createdBy"
+                    placeholder="Created by"
+                    type="text"
+                    className="room-inp px-3"
+                    value={user && user.email}
+                    onChange={(e) => setCreatedBy(e.target.value)}
+                  />
                 </div>
-                <div className="form-row pt-5">
-                  <div class="col-lg-12">
-                    <button className="room-btn1" onClick={handleSubmit}>
-                      Submit
-                    </button>
-                    <br />
-                    <Link to={`/`}>Back to Room List</Link>
-                  </div>
+              </div>
+              <div className="row pt-3">
+                <label class="col-lg-3 col-form-label"></label>
+                <div class="col-lg-9 text-start">
+                  <button className="room-btn1" onClick={handleSubmit}>
+                    Submit
+                  </button>
+                  <br />
+                  <Link to={`/`}>Back to Room List</Link>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
+          {/* </div> */}
         </div>
       </section>
     </>

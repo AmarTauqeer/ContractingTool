@@ -1,9 +1,3 @@
-.room .row {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 12px 12px 22px;
-}
-
 .room h3 {
   font-size: 2rem;
   font-weight: 700;
@@ -18,7 +12,7 @@
 }
 .room-btn1 {
   height: 40px;
-  width: 50%;
+  width: 20%;
   border: none;
   outline: none;
   font-weight: 600;

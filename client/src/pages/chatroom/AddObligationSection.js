@@ -79,66 +79,70 @@ const AddObligationSection = () => {
   };
   return (
     <>
-      <section className="section pt-5">
-        <div className="container w-50">
-          <div className="row g-0">
-            <div className="text-center py-4">
-              <h3>Obligation Section</h3>
-              <form>
-                <div className="form-row pt-5">
-                  <div className="offset-1 col-lg-10">
-                    <select
-                      name="roomId"
-                      className="section-form-select"
-                      value={roomId}
-                      onChange={(e) => {
-                        setRoomId(e.currentTarget.value);
-                      }}
-                    >
-                      {room.map((u) => (
-                        <option key={u.room_id} value={u.room_id}>
-                          {u.room_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+      <section className="section pt-5 w-50">
+        <div className="container">
+          <div className="py-4">
+            <h3 className="text-center ">Obligation Section</h3>
+            <form>
+              <div className="row pt-5">
+                <label class="col-lg-3 col-form-label fw-bold">Room:</label>
+                <div className="col-lg-9">
+                  <select
+                    name="roomId"
+                    className="section-form-select"
+                    value={roomId}
+                    onChange={(e) => {
+                      setRoomId(e.currentTarget.value);
+                    }}
+                  >
+                    {room.map((u) => (
+                      <option key={u.room_id} value={u.room_id}>
+                        {u.room_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div className="form-row pt-3">
-                  <div className="offset-1 col-lg-10">
-                    <input
-                      name="name"
-                      type="text"
-                      className="section-inp px-3"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
+              </div>
+              <div className="row pt-3">
+                <label class="col-lg-3 col-form-label fw-bold">
+                  Section name:
+                </label>
+                <div className="col-lg-9">
+                  <input
+                    name="name"
+                    type="text"
+                    className="section-inp px-3"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </div>
-                {stateErrors.nameError && (
-                  <>
-                    <div class="form-row pt-2">
-                      <div className="col-lg-10">
-                        <span className="error">
-                          {stateErrors.nameError && stateErrors.nameError}
-                        </span>
-                      </div>
+              </div>
+              {stateErrors.nameError && (
+                <>
+                  <div class="row pt-2">
+                    <label class="col-lg-3 col-form-label fw-bold"></label>
+                    <div className="col-lg-9">
+                      <span className="error">
+                        {stateErrors.nameError && stateErrors.nameError}
+                      </span>
                     </div>
-                  </>
-                )}
-                <div className="form-row pt-5">
-                  <div className="offset-1 col-lg-10">
-                    <button className="section-btn" onClick={handleSubmit}>
-                      Submit
-                    </button>
-                    <p>
-                      <Link to={`/chat/${params.userid}/${params.roomid}`}>
-                        Back to chat
-                      </Link>
-                    </p>
                   </div>
+                </>
+              )}
+              <div className="row pt-3">
+                <label class="col-lg-3 col-form-label fw-bold"></label>
+                <div className="col-lg-9">
+                  <button className="section-btn" onClick={handleSubmit}>
+                    Submit
+                  </button>
+                  <p>
+                    <Link to={`/chat/${params.userid}/${params.roomid}`}>
+                      Back to chat
+                    </Link>
+                  </p>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </section>
